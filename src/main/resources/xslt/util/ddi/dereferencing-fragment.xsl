@@ -4,35 +4,36 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
-    xmlns:a="ddi:archive:3_3"
-    xmlns:d="ddi:datacollection:3_3"
-    xmlns:r="ddi:reusable:3_3"
-    xmlns:l="ddi:logicalproduct:3_3"
-    xmlns:g="ddi:group:3_3"
-    xmlns:s="ddi:studyunit:3_3"
+    xmlns:a="ddi:archive:3_2"
+    xmlns:d="ddi:datacollection:3_2"
+    xmlns:r="ddi:reusable:3_2"
+    xmlns:l="ddi:logicalproduct:3_2"
+    xmlns:g="ddi:group:3_2"
+    xmlns:s="ddi:studyunit:3_2"
     xmlns:pogues="http://xml.insee.fr/schema/applis/pogues"
-    xmlns:pr="ddi:ddiprofile:3_3"
-    xmlns:c="ddi:conceptualcomponent:3_3"
-    xmlns:cm="ddi:comparative:3_3"
-    xmlns:ddi-instance="ddi:instance:3_3"
+    xmlns:pr="ddi:ddiprofile:3_2"
+    xmlns:c="ddi:conceptualcomponent:3_2"
+    xmlns:cm="ddi:comparative:3_2"
+    xmlns:ddi-instance="ddi:instance:3_2"
     xmlns:dereferencing="dereferencing"
-    xmlns="ddi:instance:3_3"
+    xmlns="ddi:instance:3_2"
     exclude-result-prefixes="xd"
     version="2.0">
 
-    <xsl:output method="xml" indent="no" encoding="UTF-8"/>
-
+    <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
+    
     <xd:doc>
         <xd:desc>
             <xd:p>The output folder in which the dereferenced files (one for each main sequence) are generated.</xd:p>
         </xd:desc>
     </xd:doc>
     <xsl:param name="output-folder"/>
-
+    
     <xsl:param name="do-not-use-key" select="false()"/><!--set to false() if you don't want to use keys and test how much time keys make you save -->
     <xsl:param name="fast-and-dangerous-mode" select="false()"/><!--set to false() if you don't know-->
     <xsl:param name="build-messages" select="false()"/><!--set to true() if you doubt of the result and false() if you are sure it will succeed -->
     <xsl:param name="build-DDI" select="true()"/><!--set to true() if you don't know-->
+    <xsl:strip-space elements="*"/>
 
     <xd:doc scope="stylesheet">
         <xd:desc>
@@ -57,6 +58,24 @@
         <dereferencing:reference-name name="d:NumericDomainReference"/>
         <dereferencing:reference-name name="r:NumericRepresentationReference"/>
         <dereferencing:reference-name name="r:VariableReference"/>
+
+        <dereferencing:reference-name name="ddi:TopLevelReference"/>
+
+        <dereferencing:reference-name name="CategoryReference"/>
+        <dereferencing:reference-name name="CodeListReference"/>
+        <dereferencing:reference-name name="CodeReference"/>
+        <dereferencing:reference-name name="ControlConstructReference"/>
+        <dereferencing:reference-name name="ThenConstructReference"/>
+        <dereferencing:reference-name name="ElseConstructReference"/>
+        <dereferencing:reference-name name="InterviewerInstructionReference"/>
+        <dereferencing:reference-name name="QuestionReference"/>
+        <dereferencing:reference-name name="QuestionItemReference"/>
+        <dereferencing:reference-name name="QuestionGridReference"/>
+        <dereferencing:reference-name name="DateTimeDomainReference"/>
+        <dereferencing:reference-name name="DateTimeRepresentationReference"/>
+        <dereferencing:reference-name name="NumericDomainReference"/>
+        <dereferencing:reference-name name="NumericRepresentationReference"/>
+        <dereferencing:reference-name name="VariableReference"/>
     </xsl:variable>
 
     <xsl:variable name="ignore-references">
@@ -69,6 +88,16 @@
         <dereferencing:reference-name name="r:ExternalURLReference"/>
         <!-- Celle-ci, je doute -->
         <dereferencing:reference-name name="r:ProcessingInstructionReference"/>
+
+        <dereferencing:reference-name name="QuestionSchemeReference"/>
+        <dereferencing:reference-name name="ControlConstructSchemeReference"/>
+        <dereferencing:reference-name name="InterviewerInstructionSchemeReference"/>
+        <dereferencing:reference-name name="SourceParameterReference"/>
+        <dereferencing:reference-name name="TargetParameterReference"/>
+        <dereferencing:reference-name name="BasedOnReference"/>
+        <dereferencing:reference-name name="ExternalURLReference"/>
+        <!-- Celle-ci, je doute -->
+        <dereferencing:reference-name name="ProcessingInstructionReference"/>
     </xsl:variable>
 
     <xsl:variable name="key-names">
@@ -100,39 +129,92 @@
                 <dereferencing:key-name name='r:NumericRepresentationReference-_-ManagedNumericRepresentation' name1='r:NumericRepresentationReference' name2='ManagedNumericRepresentation'/>
                 <dereferencing:key-name name='r:VariableReference-_-Variable' name1='r:VariableReference' name2='Variable'/>
                 <dereferencing:key-name name='r:VariableGroupReference-_-VariableGroup' name1='r:VariableGroupReference' name2='VariableGroup'/>
+
+                <dereferencing:key-name name='CategoryReference-_-Category' name1='CategoryReference' name2='Category'/>
+                <dereferencing:key-name name='CodeListReference-_-CodeList'  name1='CodeListReference' name2='CodeList'/>
+                <dereferencing:key-name name='CodeReference-_-Code'  name1='CodeReference' name2='Code'/>
+                <dereferencing:key-name name='ControlConstructReference-_-ComputationItem' name1='ControlConstructReference' name2='ComputationItem'/>
+                <dereferencing:key-name name='ControlConstructReference-_-IfThenElse' name1='ControlConstructReference' name2='IfThenElse'/>
+                <dereferencing:key-name name='ControlConstructReference-_-QuestionConstruct' name1='ControlConstructReference' name2='QuestionConstruct'/>
+                <dereferencing:key-name name='ControlConstructReference-_-StatementItem' name1='ControlConstructReference' name2='StatementItem'/>
+                <dereferencing:key-name name='ControlConstructReference-_-Sequence' name1='ControlConstructReference' name2='Sequence'/>
+                <dereferencing:key-name name='ControlConstructReference-_-Loop' name1='ControlConstructReference' name2='Loop'/>
+                <dereferencing:key-name name='ThenConstructReference-_-Sequence' name1='ThenConstructReference' name2='Sequence'/>
+                <dereferencing:key-name name='ElseConstructReference-_-Sequence' name1='ElseConstructReference' name2='Sequence'/>
+                <dereferencing:key-name name='InterviewerInstructionReference-_-Instruction' name1='InterviewerInstructionReference' name2='Instruction'/>
+                <dereferencing:key-name name='QuestionReference-_-QuestionBlock' name1='QuestionReference' name2='QuestionBlock'/>
+                <dereferencing:key-name name='QuestionReference-_-QuestionGrid' name1='QuestionReference' name2='QuestionGrid'/>
+                <dereferencing:key-name name='QuestionReference-_-QuestionItem' name1='QuestionReference' name2='QuestionItem'/>
+                <dereferencing:key-name name='QuestionGridReference-_-QuestionGrid' name1='QuestionGridReference' name2='QuestionGrid'/>
+                <dereferencing:key-name name='QuestionItemReference-_-QuestionItem' name1='QuestionItemReference' name2='QuestionItem'/>
+                <dereferencing:key-name name='DateTimeDomainReference-_-ManagedDateTimeRepresentation' name1='DateTimeDomainReference' name2='ManagedDateTimeRepresentation'/>
+                <dereferencing:key-name name='DateTimeRepresentationReference-_-ManagedDateTimeRepresentation' name1='DateTimeRepresentationReference' name2='ManagedDateTimeRepresentation'/>
+                <dereferencing:key-name name='NumericDomainReference-_-ManagedNumericRepresentation' name1='NumericDomainReference' name2='ManagedNumericRepresentation'/>
+                <dereferencing:key-name name='NumericRepresentationReference-_-ManagedNumericRepresentation' name1='NumericRepresentationReference' name2='ManagedNumericRepresentation'/>
+                <dereferencing:key-name name='VariableReference-_-Variable' name1='VariableReference' name2='Variable'/>
+                <dereferencing:key-name name='VariableGroupReference-_-VariableGroup' name1='VariableGroupReference' name2='VariableGroup'/>
+                
+                <dereferencing:key-name name='ddi-instance:TopLevelReference-_-Instrument' name1='ddi-instance:TopLevelReference' name2='Instrument'/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
 
-    <xsl:key name="r:CategoryReference-_-Category"                                    match="/ddi-instance:DDIInstance/g:ResourcePackage/l:CategoryScheme/l:Category"                                     use="r:ID"/>
-    <xsl:key name="r:CodeListReference-_-CodeList"                                    match="/ddi-instance:DDIInstance/g:ResourcePackage/l:CodeListScheme/l:CodeList"                                   use="r:ID"/>
-    <xsl:key name="r:CodeReference-_-Code"                                            match="/ddi-instance:DDIInstance/g:ResourcePackage/l:CodeListScheme/l:CodeList/l:Code"                            use="r:ID"/>
-    <xsl:key name="d:ControlConstructReference-_-ComputationItem"                     match="/ddi-instance:DDIInstance/g:ResourcePackage/d:ControlConstructScheme/d:ComputationItem"                    use="r:ID"/>
-    <xsl:key name="d:ControlConstructReference-_-IfThenElse"                          match="/ddi-instance:DDIInstance/g:ResourcePackage/d:ControlConstructScheme/d:IfThenElse"                         use="r:ID"/>
-    <xsl:key name="d:ControlConstructReference-_-QuestionConstruct"                   match="/ddi-instance:DDIInstance/g:ResourcePackage/d:ControlConstructScheme/d:QuestionConstruct"                  use="r:ID"/>
-    <xsl:key name="d:ControlConstructReference-_-StatementItem"                       match="/ddi-instance:DDIInstance/g:ResourcePackage/d:ControlConstructScheme/d:StatementItem"                      use="r:ID"/>
-    <xsl:key name="d:ControlConstructReference-_-Sequence"                            match="/ddi-instance:DDIInstance/g:ResourcePackage/d:ControlConstructScheme/d:Sequence"                           use="r:ID"/>
-    <xsl:key name="d:ControlConstructReference-_-Loop"                                match="/ddi-instance:DDIInstance/g:ResourcePackage/d:ControlConstructScheme/d:Loop"                               use="r:ID"/>
-    <xsl:key name="d:ThenConstructReference-_-Sequence"                               match="/ddi-instance:DDIInstance/g:ResourcePackage/d:ControlConstructScheme/d:Sequence"                           use="r:ID"/>
-    <xsl:key name="d:ElseConstructReference-_-Sequence"                               match="/ddi-instance:DDIInstance/g:ResourcePackage/d:ControlConstructScheme/d:Sequence"                           use="r:ID"/>
-    <xsl:key name="d:InterviewerInstructionReference-_-Instruction"                   match="/ddi-instance:DDIInstance/g:ResourcePackage/d:InterviewerInstructionScheme/d:Instruction"                  use="r:ID"/>
-    <xsl:key name="r:QuestionReference-_-QuestionBlock"                               match="/ddi-instance:DDIInstance/g:ResourcePackage/d:QuestionScheme/d:QuestionBlock"                              use="r:ID"/>
-    <xsl:key name="r:QuestionReference-_-QuestionGrid"                                match="/ddi-instance:DDIInstance/g:ResourcePackage/d:QuestionScheme/d:QuestionGrid"                               use="r:ID"/>
-    <xsl:key name="r:QuestionReference-_-QuestionItem"                                match="/ddi-instance:DDIInstance/g:ResourcePackage/d:QuestionScheme/d:QuestionItem"                               use="r:ID"/>
-    <xsl:key name="d:QuestionGridReference-_-QuestionGrid"                            match="/ddi-instance:DDIInstance/g:ResourcePackage/d:QuestionScheme/d:QuestionGrid"                               use="r:ID"/>
-    <xsl:key name="d:QuestionItemReference-_-QuestionItem"                            match="/ddi-instance:DDIInstance/g:ResourcePackage/d:QuestionScheme/d:QuestionItem"                               use="r:ID"/>
-    <xsl:key name="d:DateTimeDomainReference-_-ManagedDateTimeRepresentation"         match="/ddi-instance:DDIInstance/g:ResourcePackage/r:ManagedRepresentationScheme/r:ManagedDateTimeRepresentation" use="r:ID"/>
-    <xsl:key name="r:DateTimeRepresentationReference-_-ManagedDateTimeRepresentation" match="/ddi-instance:DDIInstance/g:ResourcePackage/r:ManagedRepresentationScheme/r:ManagedDateTimeRepresentation" use="r:ID"/>
-    <xsl:key name="d:NumericDomainReference-_-ManagedNumericRepresentation"           match="/ddi-instance:DDIInstance/g:ResourcePackage/r:ManagedRepresentationScheme/r:ManagedNumericRepresentation"  use="r:ID"/>
-    <xsl:key name="r:NumericRepresentationReference-_-ManagedNumericRepresentation"   match="/ddi-instance:DDIInstance/g:ResourcePackage/r:ManagedRepresentationScheme/r:ManagedNumericRepresentation"  use="r:ID"/>
-    <xsl:key name="r:VariableReference-_-Variable"                                    match="/ddi-instance:DDIInstance/g:ResourcePackage/l:VariableScheme/l:Variable"                                   use="r:ID"/>
-    <xsl:key name="r:VariableGroupReference-_-VariableGroup"                          match="/ddi-instance:DDIInstance/g:ResourcePackage/l:VariableScheme/l:VariableGroup"                              use="r:ID"/>
+    <xsl:key name="r:CategoryReference-_-Category"                                    match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/l:Category"                                     use="r:ID"/>
+    <xsl:key name="r:CodeListReference-_-CodeList"                                    match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/l:CodeList"                                   use="r:ID"/>
+    <xsl:key name="r:CodeReference-_-Code"                                            match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/l:Code"                            use="r:ID"/>
+    <xsl:key name="d:ControlConstructReference-_-ComputationItem"                     match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:ComputationItem"                    use="r:ID"/>
+    <xsl:key name="d:ControlConstructReference-_-IfThenElse"                          match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:IfThenElse"                         use="r:ID"/>
+    <xsl:key name="d:ControlConstructReference-_-QuestionConstruct"                   match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:QuestionConstruct"                  use="r:ID"/>
+    <xsl:key name="d:ControlConstructReference-_-StatementItem"                       match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:StatementItem"                      use="r:ID"/>
+    <xsl:key name="d:ControlConstructReference-_-Sequence"                            match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:Sequence"                           use="r:ID"/>
+    <xsl:key name="d:ControlConstructReference-_-Loop"                                match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:Loop"                               use="r:ID"/>
+    <xsl:key name="d:ThenConstructReference-_-Sequence"                               match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:Sequence"                           use="r:ID"/>
+    <xsl:key name="d:ElseConstructReference-_-Sequence"                               match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:Sequence"                           use="r:ID"/>
+    <xsl:key name="d:InterviewerInstructionReference-_-Instruction"                   match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:Instruction"                  use="r:ID"/>
+    <xsl:key name="r:QuestionReference-_-QuestionBlock"                               match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:QuestionBlock"                              use="r:ID"/>
+    <xsl:key name="r:QuestionReference-_-QuestionGrid"                                match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:QuestionGrid"                               use="r:ID"/>
+    <xsl:key name="r:QuestionReference-_-QuestionItem"                                match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:QuestionItem"                               use="r:ID"/>
+    <xsl:key name="d:QuestionGridReference-_-QuestionGrid"                            match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:QuestionGrid"                               use="r:ID"/>
+    <xsl:key name="d:QuestionItemReference-_-QuestionItem"                            match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:QuestionItem"                               use="r:ID"/>
+    <xsl:key name="d:DateTimeDomainReference-_-ManagedDateTimeRepresentation"         match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/r:ManagedDateTimeRepresentation" use="r:ID"/>
+    <xsl:key name="r:DateTimeRepresentationReference-_-ManagedDateTimeRepresentation" match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/r:ManagedDateTimeRepresentation" use="r:ID"/>
+    <xsl:key name="d:NumericDomainReference-_-ManagedNumericRepresentation"           match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/r:ManagedNumericRepresentation"  use="r:ID"/>
+    <xsl:key name="r:NumericRepresentationReference-_-ManagedNumericRepresentation"   match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/r:ManagedNumericRepresentation"  use="r:ID"/>
+    <xsl:key name="r:VariableReference-_-Variable"                                    match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/l:Variable"                                   use="r:ID"/>
+    <xsl:key name="r:VariableGroupReference-_-VariableGroup"                          match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/l:VariableGroup"                              use="r:ID"/>
+
+    <xsl:key name="CategoryReference-_-Category"                                    match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/l:Category"                                     use="r:ID"/>
+    <xsl:key name="CodeListReference-_-CodeList"                                    match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/l:CodeList"                                   use="r:ID"/>
+    <xsl:key name="CodeReference-_-Code"                                            match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/l:Code"                            use="r:ID"/>
+    <xsl:key name="ControlConstructReference-_-ComputationItem"                     match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:ComputationItem"                    use="r:ID"/>
+    <xsl:key name="ControlConstructReference-_-IfThenElse"                          match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:IfThenElse"                         use="r:ID"/>
+    <xsl:key name="ControlConstructReference-_-QuestionConstruct"                   match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:QuestionConstruct"                  use="r:ID"/>
+    <xsl:key name="ControlConstructReference-_-StatementItem"                       match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:StatementItem"                      use="r:ID"/>
+    <xsl:key name="ControlConstructReference-_-Sequence"                            match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:Sequence"                           use="r:ID"/>
+    <xsl:key name="ControlConstructReference-_-Loop"                                match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:Loop"                               use="r:ID"/>
+    <xsl:key name="ThenConstructReference-_-Sequence"                               match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:Sequence"                           use="r:ID"/>
+    <xsl:key name="ElseConstructReference-_-Sequence"                               match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:Sequence"                           use="r:ID"/>
+    <xsl:key name="InterviewerInstructionReference-_-Instruction"                   match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:Instruction"                  use="r:ID"/>
+    <xsl:key name="QuestionReference-_-QuestionBlock"                               match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:QuestionBlock"                              use="r:ID"/>
+    <xsl:key name="QuestionReference-_-QuestionGrid"                                match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:QuestionGrid"                               use="r:ID"/>
+    <xsl:key name="QuestionReference-_-QuestionItem"                                match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:QuestionItem"                               use="r:ID"/>
+    <xsl:key name="QuestionGridReference-_-QuestionGrid"                            match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:QuestionGrid"                               use="r:ID"/>
+    <xsl:key name="QuestionItemReference-_-QuestionItem"                            match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:QuestionItem"                               use="r:ID"/>
+    <xsl:key name="DateTimeDomainReference-_-ManagedDateTimeRepresentation"         match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/r:ManagedDateTimeRepresentation" use="r:ID"/>
+    <xsl:key name="DateTimeRepresentationReference-_-ManagedDateTimeRepresentation" match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/r:ManagedDateTimeRepresentation" use="r:ID"/>
+    <xsl:key name="NumericDomainReference-_-ManagedNumericRepresentation"           match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/r:ManagedNumericRepresentation"  use="r:ID"/>
+    <xsl:key name="NumericRepresentationReference-_-ManagedNumericRepresentation"   match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/r:ManagedNumericRepresentation"  use="r:ID"/>
+    <xsl:key name="VariableReference-_-Variable"                                    match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/l:Variable"                                   use="r:ID"/>
+    <xsl:key name="VariableGroupReference-_-VariableGroup"                          match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/l:VariableGroup"                              use="r:ID"/>
+    
+    <xsl:key name="ddi-instance:TopLevelReference-_-Instrument"                          match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:Instrument"                              use="r:ID"/>
     <!--when modifying keys : modify key-names variable ; if you do not the program will not work-->
-    <xsl:key name="external-variable" match="/ddi-instance:DDIInstance/g:ResourcePackage/l:VariableScheme/l:Variable[not(r:QuestionReference or r:SourceParameterReference or descendant::r:ProcessingInstructionReference)]" use="r:ID"/>
-    <xsl:key name="referenced-variable" match="/ddi-instance:DDIInstance/g:ResourcePackage/l:VariableScheme/l:VariableGroup/r:VariableReference" use="r:ID"/>
-    <xsl:key name="calculated-variable" match="/ddi-instance:DDIInstance/g:ResourcePackage/d:ProcessingInstructionScheme/d:GenerationInstruction" use="d:ControlConstructReference/r:ID"/>
-    <xsl:key name="variablegroup" match="/ddi-instance:DDIInstance/g:ResourcePackage/l:VariableScheme/l:VariableGroup" use="r:BasedOnObject/r:BasedOnReference[1]/r:ID"/>
-    <xsl:key name="tooltip-with-id" match="/ddi-instance:DDIInstance/g:ResourcePackage/d:InterviewerInstructionScheme/d:Instruction[d:InstructionName/r:String='tooltip' and descendant::*/@id]" use="descendant::*/@id"/>
+    <xsl:key name="external-variable" match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/l:Variable[not(r:QuestionReference or r:SourceParameterReference or descendant::r:ProcessingInstructionReference)]" use="r:ID"/>
+    <xsl:key name="referenced-variable" match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/l:VariableGroup/r:VariableReference" use="r:ID"/>
+    <xsl:key name="calculated-variable" match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:GenerationInstruction" use="d:ControlConstructReference/r:ID"/>
+    <xsl:key name="loop-variablegroup" match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/l:VariableGroup[l:TypeOfVariableGroup='QuestionLoop']" use="r:BasedOnObject/r:BasedOnReference/r:ID"/>
+    <xsl:key name="tableloop-variablegroup" match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/l:VariableGroup[l:TypeOfVariableGroup='TableLoop']" use="r:BasedOnObject/r:BasedOnReference/r:ID"/>
+    <xsl:key name="tooltip-with-id" match="/ddi-instance:FragmentInstance/ddi-instance:Fragment/d:Instruction[d:InstructionName/r:String='tooltip' and descendant::*/@id]" use="descendant::*/@id"/>
 
     <xsl:variable name="message-label">
         <dereferencing:message type-number="1" message-order="1">
@@ -182,88 +264,79 @@
 
     <xsl:template match="/">
         <xsl:if test="$build-messages">
-            <dereferencing:dereferencing-result-messages>
-                <xsl:variable name="messages-all">
-                    <xsl:for-each select="ddi-instance:DDIInstance/s:StudyUnit/d:DataCollection/d:InstrumentScheme/d:Instrument">
-                        <xsl:apply-templates select="." mode="output-message"/>
-                    </xsl:for-each>
-                </xsl:variable>
-                <xsl:for-each select="$message-label/*" >
-                    <xsl:sort select="number(dereferencing:message-order)"/>
-                    <xsl:if test="$messages-all/*[dereferencing:type-number=current()/@type-number]">
-                        <xsl:copy>
-                            <xsl:copy-of select="./@* | ./node() |text()"/>
-                            <xsl:choose>
-                                <xsl:when test="dereferencing:modifyXSLcode">
-                                    <xsl:for-each-group select="$messages-all/*[./dereferencing:type-number=current()/@type-number]" group-by="./dereferencing:value">
-                                        <xsl:sort select="./dereferencing:value"/>
-                                        <dereferencing:value>
-                                            <xsl:copy-of select="./dereferencing:value/*"/>
-                                            <dereferencing:where-list>
-                                                <xsl:for-each-group select="current-group()" group-by="dereferencing:where">
-                                                    <xsl:sort select="dereferencing:where"/>
-                                                    <xsl:copy-of select="./dereferencing:where"/>
-                                                </xsl:for-each-group>
-                                            </dereferencing:where-list>
-                                        </dereferencing:value>
-                                    </xsl:for-each-group>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:for-each-group select="$messages-all/*[./dereferencing:type-number=current()/@type-number]" group-by="./dereferencing:where">
-                                        <xsl:sort select="./dereferencing:where"/>
-                                        <xsl:copy-of select="./*[name() != 'dereferencing:type-number']"/>
-                                    </xsl:for-each-group>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:copy>
-                    </xsl:if>
-                </xsl:for-each>
-            </dereferencing:dereferencing-result-messages>
+                    <dereferencing:dereferencing-result-messages>
+                        <xsl:variable name="messages-all">
+                            <xsl:for-each select="/ddi-instance:FragmentInstance/ddi-instance:TopLevelReference">
+                                <xsl:apply-templates select="." mode="output-message"/>
+                            </xsl:for-each>
+                        </xsl:variable>
+                        <xsl:for-each select="$message-label/*" >
+                            <xsl:sort select="number(dereferencing:message-order)"/>
+                            <xsl:if test="$messages-all/*[dereferencing:type-number=current()/@type-number]">
+                                <xsl:copy>
+                                    <xsl:copy-of select="./@* | ./node() |text()"/>
+                                    <xsl:choose>
+                                        <xsl:when test="dereferencing:modifyXSLcode">
+                                            <xsl:for-each-group select="$messages-all/*[./dereferencing:type-number=current()/@type-number]" group-by="./dereferencing:value">
+                                                <xsl:sort select="./dereferencing:value"/>
+                                                <dereferencing:value>
+                                                    <xsl:copy-of select="./dereferencing:value/*"/>
+                                                    <dereferencing:where-list>
+                                                        <xsl:for-each-group select="current-group()" group-by="dereferencing:where">
+                                                            <xsl:sort select="dereferencing:where"/>
+                                                            <xsl:copy-of select="./dereferencing:where"/>
+                                                        </xsl:for-each-group>
+                                                    </dereferencing:where-list>
+                                                </dereferencing:value>
+                                            </xsl:for-each-group>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:for-each-group select="$messages-all/*[./dereferencing:type-number=current()/@type-number]" group-by="./dereferencing:where">
+                                                <xsl:sort select="./dereferencing:where"/>
+                                                <xsl:copy-of select="./*[name() != 'dereferencing:type-number']"/>
+                                            </xsl:for-each-group>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:copy>
+                            </xsl:if>
+                        </xsl:for-each>
+                    </dereferencing:dereferencing-result-messages>
         </xsl:if>
-        <xsl:if test="$build-DDI">
-            <xsl:for-each select="ddi-instance:DDIInstance/s:StudyUnit/d:DataCollection/d:InstrumentScheme/d:Instrument">
-                <xsl:variable name="form-name">
-                    <xsl:choose>
-                        <xsl:when test="d:InstrumentName">
-                            <xsl:value-of select="d:InstrumentName/r:String"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="replace(r:ID/text(), concat(replace(//s:StudyUnit/r:ID/text(), '-SU', ''),'-In-'), '')"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-                <xsl:result-document href="{lower-case(concat('file:///',replace($output-folder, '\\' , '/'),'/',$form-name,'.tmp'))}">
-                    <DDIInstance xmlns="ddi:instance:3_3"
-                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                        xmlns:a="ddi:archive:3_3"
-                        xmlns:eno="http://xml.insee.fr/apps/eno"
-                        xmlns:enoddi33="http://xml.insee.fr/apps/eno/out/ddi33"
-                        xmlns:pogues="http://xml.insee.fr/schema/applis/pogues"
-                        xmlns:pr="ddi:ddiprofile:3_3"
-                        xmlns:c="ddi:conceptualcomponent:3_3"
-                        xmlns:cm="ddi:comparative:3_3">
-                        <s:StudyUnit>
-                            <xsl:apply-templates select="." mode="output-DDI">
-                                <xsl:with-param name="form-id" select="r:ID" tunnel="yes"/>
-                            </xsl:apply-templates>
-                        </s:StudyUnit>
-                        <g:ResourcePackage>
-                            <l:VariableScheme>
-                                <xsl:choose>
-                                    <xsl:when test="key('variablegroup',r:ID)">
-                                        <xsl:apply-templates select="key('variablegroup',r:ID)" mode="output-DDI"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:apply-templates select="//l:VariableScheme/l:Variable[not(r:ID=//l:VariableScheme//r:VariableReference/r:ID)]
-                                            |//l:VariableScheme/l:VariableGroup[not(r:ID=//l:VariableScheme//r:VariableGroupReference/r:ID)]" mode="output-DDI">
-                                        </xsl:apply-templates>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </l:VariableScheme>
-                        </g:ResourcePackage>
-                    </DDIInstance>
-                </xsl:result-document>
-            </xsl:for-each>
+                    <xsl:if test="$build-DDI">
+                <xsl:for-each select="/ddi-instance:FragmentInstance/ddi-instance:TopLevelReference">
+                    <xsl:variable name="form-name">
+                        <xsl:choose>
+                            <xsl:when test="d:InstrumentName">
+                                <xsl:value-of select="d:InstrumentName/r:String"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="replace(r:ID/text(), concat(replace(//s:StudyUnit/r:ID/text(), '-SU', ''),'-In-'), '')"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <xsl:result-document href="{lower-case(concat('file:///',replace($output-folder, '\\' , '/'),'/',$form-name,'.tmp'))}">
+                        <DDIInstance xmlns="ddi:instance:3_2"
+                            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                            xmlns:a="ddi:archive:3_2"
+                            xmlns:eno="http://xml.insee.fr/apps/eno"
+                            xmlns:enoddi33="http://xml.insee.fr/apps/eno/out/ddi33"
+                            xmlns:pogues="http://xml.insee.fr/schema/applis/pogues"
+                            xmlns:pr="ddi:ddiprofile:3_2"
+                            xmlns:c="ddi:conceptualcomponent:3_2"
+                            xmlns:cm="ddi:comparative:3_2">
+                            <s:StudyUnit>
+                                <xsl:apply-templates select="." mode="output-DDI"/>
+                            </s:StudyUnit>
+                            <g:ResourcePackage>
+                                <l:VariableScheme>
+                                    <xsl:apply-templates select="//l:VariableScheme/l:Variable[not(r:ID=//l:VariableScheme//r:VariableReference/r:ID)]
+                                        |//l:VariableScheme/l:VariableGroup[not(r:ID=//l:VariableScheme//r:VariableGroupReference/r:ID)]" mode="output-DDI">
+                                    </xsl:apply-templates>
+                                </l:VariableScheme>
+                            </g:ResourcePackage>
+                        </DDIInstance>
+                    </xsl:result-document>
+                </xsl:for-each>
         </xsl:if>
     </xsl:template>
 
@@ -364,22 +437,14 @@
         <xd:desc>Template for template Sequence</xd:desc>
     </xd:doc>
     <xsl:template match="d:Sequence[d:TypeOfSequence/text() = 'template']" mode="output-DDI">
-        <xsl:param name="form-id" tunnel="yes"/>
         <xsl:variable name="current-ID" select="r:ID"/>
-
+        
         <xsl:copy>
-            <xsl:choose>
-                <xsl:when test="key('variablegroup',$form-id)">
-                    <xsl:apply-templates select="key('variablegroup',$form-id)/r:VariableReference/key('external-variable',r:ID)" mode="output-DDI"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:for-each select="//l:VariableScheme/l:Variable">
-                        <xsl:if test="count(key('external-variable',r:ID))=1 and not(count(key('referenced-variable',r:ID))=1)">
-                            <xsl:apply-templates select="key('external-variable',r:ID)" mode="output-DDI"/>
-                        </xsl:if>
-                    </xsl:for-each>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:for-each select="//l:VariableScheme/l:Variable">
+                <xsl:if test="count(key('external-variable',r:ID))=1 and not(count(key('referenced-variable',r:ID))=1)">
+                    <xsl:apply-templates select="key('external-variable',r:ID)" mode="output-DDI"/>
+                </xsl:if>
+            </xsl:for-each>
             <xsl:apply-templates select="*" mode="output-DDI"/>
             <xsl:apply-templates select="key('calculated-variable',$current-ID)" mode="output-DDI"/>
         </xsl:copy>
@@ -390,17 +455,9 @@
     </xd:doc>
     <xsl:template match="d:Loop" mode="output-DDI">
         <xsl:variable name="current-ID" select="r:ID"/>
-
+        
         <xsl:copy>
-            <xsl:choose>
-                <xsl:when test="key('variablegroup',$current-ID)">
-                    <xsl:apply-templates select="key('variablegroup',$current-ID)/r:VariableReference/key('external-variable',r:ID)" mode="output-DDI"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates select="/ddi-instance:DDIInstance/g:ResourcePackage/l:VariableScheme/l:VariableGroup[r:BasedOnObject/r:BasedOnReference/r:ID = $current-ID]
-                                                                                                                             /r:VariableReference/key('external-variable',r:ID)" mode="output-DDI"/>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="key('loop-variablegroup',$current-ID)/r:VariableReference/key('external-variable',r:ID)" mode="output-DDI"/>
             <xsl:apply-templates select="*" mode="output-DDI"/>
             <xsl:apply-templates select="key('calculated-variable',$current-ID)" mode="output-DDI"/>
         </xsl:copy>
@@ -415,7 +472,7 @@
                 <xsl:value-of select="replace(@href,'#','')"/>
             </xsl:for-each>
         </xsl:variable>
-
+        
         <xsl:copy-of select="."/>
         <xsl:for-each select="key('tooltip-with-id',$ref)">
             <d:InterviewerInstructionReference>
@@ -429,9 +486,9 @@
     </xd:doc>
     <xsl:template match="d:QuestionGrid[d:GridDimension/d:Roster]/d:StructuredMixedGridResponseDomain" mode="output-DDI">
         <xsl:variable name="loop-ID" select="../r:ID"/>
-
+        
         <xsl:copy>
-            <xsl:apply-templates select="key('variablegroup',$loop-ID)/r:VariableReference/key('external-variable',r:ID)" mode="output-DDI"/>
+            <xsl:apply-templates select="key('tableloop-variablegroup',$loop-ID)/r:VariableReference/key('external-variable',r:ID)" mode="output-DDI"/>
             <xsl:apply-templates select="*" mode="output-DDI"/>
             <xsl:apply-templates select="key('calculated-variable',$loop-ID)" mode="output-DDI"/>
         </xsl:copy>
