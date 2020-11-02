@@ -11,7 +11,7 @@
         <empty />
     </xsl:param>
 
-    <!-- metadata file coming from database "Pilotageé) -->
+    <!-- metadata file coming from database "Pilotage") -->
     <xsl:param name="metadata-file" />
     <xsl:param name="metadata-node" as="node()" required="no">
         <empty />
@@ -77,7 +77,6 @@
     <xsl:variable name="ServiceCollecteurSignataireFonction" select="$metadata//ServiceCollecteurSignataireFonction" />
     <xsl:variable name="ServiceCollecteurSignataireNom" select="$metadata//ServiceCollecteurSignataireNom" />
     <xsl:variable name="ServiceCollecteurSignataireSexe" select="$metadata//ServiceCollecteurSignataireSexe" />
-    <xsl:variable name="NumeroVisa" select="$metadata//NumeroVisa" />
     <xsl:variable name="MinistereTutelle" select="$metadata//MinistereTutelle" />
     <xsl:variable name="AnneeCollecte" select="$metadata//AnneeCollecte" />
     <xsl:variable name="ParutionJO" select="$metadata//ParutionJO" />
@@ -188,7 +187,7 @@
                     <xsl:text> est reconnue d'&lt;b&gt;</xsl:text>
                     <xsl:value-of select="$StatutEnquete" />
                     <xsl:text>&lt;/b&gt;.&lt;/p&gt;&lt;p&gt;Merci de répondre avant le :
-                    &lt;b&gt;øDATE_RETOUR_SOUHAITEEø&lt;/b&gt;&lt;/p&gt;&lt;/div&gt;</xsl:text>
+                    &lt;b&gt;¤DATE_RETOUR_SOUHAITEE¤&lt;/b&gt;&lt;/p&gt;&lt;/div&gt;</xsl:text>
                 </xsl:if>
             </label>
         </ACCUEIL-2>
@@ -247,7 +246,7 @@
                     <xsl:text>" target="_blank"&gt;loi n° 51-711 du 7 juin 1951&lt;/a&gt; sur l’obligation, la coordination et le secret en matière de statistiques.</xsl:text>
 
                     <xsl:text>&lt;/p&gt;&lt;p&gt;Visa n°</xsl:text>
-                    <xsl:value-of select="$NumeroVisa" />
+                    <xsl:text>¤NumeroVisa¤</xsl:text>
                     <xsl:text> </xsl:text>
                     <xsl:for-each select="$MinistereTutelle">
                         <xsl:text>du </xsl:text>
@@ -305,7 +304,7 @@
                             dans le cadre des mesures de simplification pour les entreprises.</xsl:text>
                     </xsl:if>
                     <xsl:text>&lt;/p&gt;&lt;p&gt;Visa n°</xsl:text>
-                    <xsl:value-of select="$NumeroVisa"/>
+                    <xsl:text>¤NumeroVisa¤</xsl:text>
                     <xsl:text> </xsl:text>
                     <xsl:for-each select="$MinistereTutelle">
                         <xsl:text>du Ministre </xsl:text>
@@ -354,7 +353,7 @@
                     <xf:label ref="replace(replace(replace($form-resources/ACCUEIL-2/label,'¤QuiRepond1¤',instance('fr-form-instance')//Variable[@idVariable='QuiRepond1']),'¤QuiRepond2¤',instance('fr-form-instance')//Variable[@idVariable='QuiRepond2']),'¤QuiRepond3¤',instance('fr-form-instance')//Variable[@idVariable='QuiRepond3'])" mediatype="text/html" />
                 </xsl:if>
                 <xsl:if test="$context=$business">
-                    <xf:label ref="$form-resources/ACCUEIL-2/label" mediatype="text/html" />
+                    <xf:label ref="replace($form-resources/ACCUEIL-2/label,'¤DATE_RETOUR_SOUHAITEE¤',xf:instance[@id='donnees-pilotage']//DateRetourSouhaitee)" mediatype="text/html" />
                 </xsl:if>
             </xf:output>
             <xf:output id="ACCUEIL-3-control" name="ACCUEIL-3" bind="ACCUEIL-3-bind">
@@ -376,7 +375,7 @@
                 <xf:setvalue ev:event="DOMActivate" ref="instance('fr-form-util')/cadreLegal" value="if (instance('fr-form-util')/cadreLegal/text()!='') then ('') else ('affiche')" />
             </xf:trigger>
             <xf:output id="ACCUEIL-7-control" name="ACCUEIL-7" bind="ACCUEIL-7-bind">
-                <xf:label ref="$form-resources/ACCUEIL-7/label" mediatype="text/html" />
+                <xf:label ref="replace($form-resources/ACCUEIL-7/label,'¤NumeroVisa¤',xf:instance[@id='donnees-pilotage']//NumeroVisa)" mediatype="text/html"/>
             </xf:output>
         </fr:section>
     </xsl:template>
