@@ -223,12 +223,12 @@
                         </INSEE-BUSINESS-QUEST-DEBUT>
                         <INSEE-BUSINESS-SEQ-0-1>
                             <label>
-                                <xsl:value-of select="'Identification de votre øLabelUniteEnqueteeø'"/>
+                                <xsl:value-of select="'Identification de votre ¤LabelUniteEnquetee¤'"/>
                             </label>
                         </INSEE-BUSINESS-SEQ-0-1>
                         <COMMENT_UE>
                             <label>
-                                <xsl:value-of select="'➡ Remarque, commentaire sur un changement concernant votre øLabelUniteEnqueteeø :'"/>
+                                <xsl:value-of select="'➡ Remarque, commentaire sur un changement concernant votre ¤LabelUniteEnquetee¤ :'"/>
                             </label>
                         </COMMENT_UE>
                     </xsl:if>
@@ -365,11 +365,11 @@
                             <xhtml:div class="submodule">
                                 <xhtml:h3>
                                     <xf:output id="INSEE-BUSINESS-SEQ-0-1-control" bind="INSEE-BUSINESS-SEQ-0-1-bind">
-                                        <xf:label ref="$form-resources/INSEE-BUSINESS-SEQ-0-1/label" class="submodule" mediatype="text/html"/>
+                                        <xf:label ref="replace($form-resources/INSEE-BUSINESS-SEQ-0-1/label,'¤LabelUniteEnquetee¤',xf:instance[@id='donnees-pilotage']//UniteEnquetee/LabelUniteEnquetee)" class="submodule" mediatype="text/html"/>
                                     </xf:output>
                                 </xhtml:h3>
                                 <xf:textarea id="COMMENT_UE-control" name="COMMENT_UE" bind="COMMENT_UE-bind" class="question text text2000" xxf:maxlength="2000">
-                                    <xf:label ref="$form-resources/COMMENT_UE/label"/>
+                                    <xf:label ref="replace($form-resources/COMMENT_UE/label,'¤LabelUniteEnquetee¤',xf:instance[@id='donnees-pilotage']//UniteEnquetee/LabelUniteEnquetee)"/>
                                 </xf:textarea>
                             </xhtml:div>
                         </fr:section>
