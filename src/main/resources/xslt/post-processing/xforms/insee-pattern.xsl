@@ -125,6 +125,8 @@
                         <BarreFixe />
                         <LabelUniteEnquetee />
                     </UniteEnquetee>
+                    <DateRetourSouhaitee/>
+                    <NumeroVisa/>
                 </xsl:if>
             </InformationsQuestionnaire>
         </xf:instance>
@@ -135,6 +137,8 @@
                     <xf:bind id="BarreFixe-bind" ref="BarreFixe"/>
                     <xf:bind id="LabelUniteEnquetee-bind" ref="LabelUniteEnquetee"/>
                 </xf:bind>
+                <xf:bind id="DateRetourSouhaitee-bind" ref="DateRetourSouhaitee"/>
+                <xf:bind id="NumeroVisa-bind" ref="NumeroVisa"/>
             </xsl:if>
         </xf:bind>
     </xsl:template>
