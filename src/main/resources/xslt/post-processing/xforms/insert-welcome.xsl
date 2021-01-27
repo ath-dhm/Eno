@@ -10,7 +10,7 @@
     <xsl:param name="parameters-node" as="node()" required="no">
         <empty />
     </xsl:param>
-    
+
     <!-- metadata file coming from database "Pilotage") -->
     <xsl:param name="metadata-file" />
     <xsl:param name="metadata-node" as="node()" required="no">
